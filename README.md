@@ -152,5 +152,5 @@ To reproduce this analysis:
 
 ## 10\. Contact
 
-  * **[Ezekwem Desmond/https://ezekwemdesmond.com/]**
-  * **[engrstephdez@gmail.com]**
+  * **Ezekwem Desmond/https://ezekwemdesmond.com/**
+  * **engrstephdez@gmail.com**
