@@ -49,7 +49,7 @@ This project employs a multi-faceted analytical approach to explore antidepressa
 6.  **Visualization:** Various plots (line charts, bar charts) and tables were generated to visually represent trends and insights.
 7.  **Interpretation:** Findings were interpreted in the context of known healthcare policies, market dynamics (e.g., genericisation), and public health trends.
 
-The analysis period spans from January 2021 to March 2025. It is important to note that data for 2025 represents a partial year (Q1 only).
+The analysis period spans from January 2021 to April 2025. It is important to note that data for 2025 represents a partial year (Q1 only).
 
 ## 4\. Key Findings & Insights
 
