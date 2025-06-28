@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This project presents a comprehensive analysis of antidepressant prescription trends within the National Health Service (NHS) in England from January 2021 to March 2025. The core objective was to investigate the dynamics of prescription volume (items) and associated costs at national, regional, and specific drug levels.
+This project presents a comprehensive analysis of antidepressant prescription trends within the National Health Service (NHS) in England from January 2021 to April 2025. The core objective was to investigate the dynamics of prescription volume (items) and associated costs at national, regional, and specific drug levels.
 
 The analysis reveals a significant divergence: while the total number of antidepressant items prescribed consistently increased across all NHS regions, total national prescribing costs experienced a dramatic reduction between 2021 and 2022, subsequently stabilizing at a lower baseline. This cost containment was predominantly driven by the widespread genericisation of high-volume drugs, notably Sertraline hydrochloride. Despite accounting for over a quarter of all antidepressant items nationally, Sertraline's contribution to total cost is proportionally lower, reflecting a significantly reduced unit cost (overall mean cost per item: £2.37). Regional analysis further highlighted variations in Sertraline's mean cost per item, with the South East recording the highest (£2.74) and North East and Yorkshire the lowest (£2.14). This project underscores the NHS's success in managing pharmaceutical expenditure for antidepressants while effectively meeting growing patient demand.
 
@@ -33,7 +33,7 @@ The dataset was structured to provide granular insights, grouped by:
 
 This project employs a multi-faceted analytical approach to explore antidepressant prescription trends:
 
-1.  **Data Acquisition:** A custom Python script (`nhs_scraper.py`) was developed to scrape the relevant prescription data from the NHS BSA website.
+1.  **Data Acquisition:** A custom Python script (`scraper.py`) was developed to scrape the relevant prescription data from the NHS BSA website.
 2.  **Data Preprocessing & Grouping:** The raw data was cleaned, transformed, and aggregated within a Jupyter Notebook to create a structured dataset suitable for analysis.
 3.  **National Trend Analysis:**
       * Time-series analysis of national monthly prescribing costs to identify overall patterns and anomalies.
@@ -135,12 +135,12 @@ To reproduce this analysis:
 4.  **Run the scraper:**
     If you wish to obtain the latest data or verify the scraping process, execute:
     ```bash
-    python scripts/nhs_scraper.py
+    python scraper.py
     ```
     *(Note: This scraper is designed for the NHS BSA website structure at the time of development and may require updates if the website changes.)*
 5.  **Open and run the Jupyter Notebook:**
     ```bash
-    jupyter notebook notebooks/Antidepressant_Analysis.ipynb
+    Antidepressant_Analysis.ipynb
     ```
     Execute the cells sequentially within the notebook to see the data loading, processing, analysis, and visualizations.
 
