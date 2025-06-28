@@ -139,7 +139,7 @@ To reproduce this analysis:
     ```
     *(Note: This scraper is designed for the NHS BSA website structure at the time of development and may require updates if the website changes.)*
 5.  **Open and run the Jupyter Notebook:**
-    *(Note: Run jupyter notebook from Anaconda Distribution (Recommended))*
+    *(Note: Run jupyter notebook from Anaconda Distribution (Recommended)).*
     Execute the cells sequentially within the notebook to see the data loading, processing, analysis, and visualizations.
 
 ## 9\. Future Work
