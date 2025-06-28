@@ -102,7 +102,7 @@ The analysis period spans from January 2021 to March 2025. It is important to no
 
 ```
 NHS_Antidepressant_Prescription_Analysis/
-├── README.md                          (This file)
+├
 ├── requirements.txt                   (Python dependencies)
 ├── pca_data/
 │   ├── combined_pca_data
