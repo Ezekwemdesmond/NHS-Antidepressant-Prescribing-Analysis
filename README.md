@@ -120,7 +120,7 @@ To reproduce this analysis:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/NHS_Antidepressant_Prescription_Analysis.git
+    git clone https://github.com/Ezekwemdesmond/NHS-Antidepressant-Prescribing-Analysis.git
     cd NHS_Antidepressant_Prescription_Analysis
     ```
 2.  **Create a virtual environment (recommended):**
