@@ -97,6 +97,7 @@ The analysis period spans from January 2021 to April 2025. It is important to no
   * Seaborn (for enhanced visualizations)
   * Jupyter Notebook (for interactive analysis and presentation)
   * VSCode
+  * Web Scraping
 
 ## 7\. Project Structure
 
