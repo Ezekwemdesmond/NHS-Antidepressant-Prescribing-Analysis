@@ -59,7 +59,7 @@ This project demonstrates the complete data analyst workflow — from raw public
 │      ├──────────────► forecast.py ────────► forecast.csv           │
 │      │                    (Prophet · 80% CI · 12 months)           │
 │      ▼                                                              │
-│  loader.py ───────► MySQL (nhs_prescribing)                        │
+│  Power BI ────────► MySQL (nhs_prescribing)  (direct connection)   │
 │                          ├── dates                                  │
 │                          ├── regions                                │
 │                          ├── drugs                                  │
@@ -70,6 +70,42 @@ This project demonstrates the complete data analyst workflow — from raw public
 │                     Power BI Dashboard (5 pages · 70+ DAX)         │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 📸 Dashboard Screenshots
+
+> All screenshots are taken from the live Power BI dashboard connected to the MySQL nhs_prescribing database.
+
+### Page 1 — National Overview
+![National Overview](images/page1_national_overview.png)
+*KPI cards with YoY comparisons · Annual items vs cost bar chart · Cost per item annual trend · Monthly dual-axis line chart*
+
+---
+
+### Page 2 — Drug Analysis
+![Drug Analysis](images/page2_drug_analysis.png)
+*Top 10 antidepressants by total spend, items and cost per item · Drug cost efficiency table with conditional classification*
+
+---
+
+### Page 3 — Regional Analysis
+![Regional Analysis](images/page3_regional_analysis.png)
+*Items vs cost vs CPI scatter plot · Annual bar charts by region · Regional performance summary 2021 vs 2025*
+
+---
+
+### Page 4 — Drivers & Trends
+![Drivers & Trends](images/page4_drivers_trends.png)
+*Stacked area charts by drug and region · Monthly MoM change column charts · Decomposition tree · Key influencers*
+
+---
+
+### Page 5 — Forecast
+![Forecast](images/page5_forecast.png)
+*12-month Prophet forecast with 80% CI bands · Monthly forecast table · KPI cards with vs current year labels*
+
+---
 
 ---
 
@@ -179,13 +215,13 @@ The matrix heatmap below shows total items prescribed by month and year across 2
 
 ### 6. Key Influencer Analysis — What Drives High Cost Per Item?
 
-Using Power BI's Key Influencers visual on the prescriptions data, the analysis identified the statistical factors most associated with **high cost per item**:
+Using Power BI's Key Influencers visual set to **Increase**, the analysis identifies the drugs most responsible for pulling the average cost per item upward:
 
-- When `bnf_chemical_substance` is **Mirtazapine** → average CPI **decreases by £107.6** vs baseline
-- When `bnf_chemical_substance` is **Citalopram hydrobromide** → average CPI **decreases by £107.6**
-- When `bnf_chemical_substance` is **Amitriptyline hydrochloride** → average CPI **decreases by £107.4**
+- When `bnf_chemical_substance` is **Tranylcypromine sulfate** → average CPI **increases by £1,310** (£1.31K)
+- When `bnf_chemical_substance` is **Isocarboxazid** → average CPI **increases by £356.10**
+- When `bnf_chemical_substance` is **Trimipramine maleate** → average CPI **increases by £230.40**
 
-The inverse finding — what drives CPI to *increase* — points directly to the handful of high-cost drugs (Tranylcypromine sulfate at **£1,337.24/item**, Nefazodone at **£617.55/item**, Isocarboxazid at **£349.57/item**) that inflate the average despite negligible prescription volumes.
+These three drugs are the primary statistical drivers of high cost per item in the dataset. Despite collectively accounting for less than **0.03% of total prescriptions**, their extreme unit prices (Tranylcypromine at £1,337.24/item, Isocarboxazid at £349.57/item, Trimipramine at £342.16/item) disproportionately inflate the national average CPI whenever they appear in the data. This confirms that the NHS mean cost per item of £2.70 is skewed upward by a small number of high-cost specialist drugs rather than being representative of the typical antidepressant prescription.
 
 ---
 
@@ -271,13 +307,11 @@ NHS-Antidepressant-Prescribing-Analysis/
 ├── scraper.py                    # Automated NHS BSA data scraper
 ├── processor.py                  # 11-step data processing pipeline
 ├── forecast.py                   # Facebook Prophet forecasting
-├── loader.py                     # MySQL database loader (idempotent)
 │
 ├── sql/
-│   ├── schema.sql             # Star schema DDL
-│   ├── analysis.sql           # 20 analytical SQL queries (6 sections)
-│   |
-│   └── forecast.sql           # Forecast table DDL
+│   ├── schema.sql                # Star schema DDL
+│   ├── analysis.sql              # 20 analytical SQL queries (6 sections)
+│   └── forecast.sql              # Forecast table DDL
 │
 ├── pca_data/
 │   ├── raw/                      # Landing zone for downloaded CSVs
@@ -285,9 +319,14 @@ NHS-Antidepressant-Prescribing-Analysis/
 │   ├── forecast.csv              # Forecast output (generated by forecast.py)
 │   └── logs/                     # Pipeline execution logs
 │
+├── images/
+│   └── matrix_heatmap.png        # Seasonal prescribing heatmap
+│
+├── docs/
+│   └── nhs_project_documentation.pdf  # Full project documentation
+│
 ├── Antidepressant_Analysis.ipynb # Exploratory data analysis notebook
 ├── nhs_analysis.pbix             # Power BI dashboard
-├── nhs_project_documentation.docx # Full project documentation
 ├── requirements.txt              # Python dependencies
 ├── .env                          # Environment variable template
 └── README.md
@@ -326,7 +365,7 @@ cp .env.example .env
 
 ```bash
 # Step 1 — Create the database schema
-# Run sql/01_schema.sql and sql/04_forecast_schema.sql in MySQL Workbench
+# Run sql/schema.sql and sql/forecast.sql in MySQL Workbench
 
 # Step 2 — Scrape the data
 python scraper.py
@@ -337,10 +376,7 @@ python processor.py
 # Step 4 — Generate the forecast
 python forecast.py
 
-# Step 5 — Load into MySQL
-python loader.py
-
-# Step 6 — Open Power BI
+# Step 5 — Open Power BI
 # Open nhs_analysis.pbix and refresh all data sources
 ```
 
@@ -377,6 +413,12 @@ nhs_prescribing (star schema)
 | Drug Insights | 9 | `Most Prescribed Drug`, `Drug with Most Cost`, `Drug with Highest Cost Per Item` |
 | Regional Insights | 14 | `Highest Prescribing Region`, `Fastest Growing Region`, `Items Change 2021 vs 2025` |
 | Forecast | 15 | `Total Forecast Items`, `Forecast CPI`, `Forecast Items vs Current Year Label` |
+
+---
+
+## 📄 Documentation
+
+Full project documentation including methodology, key findings, DAX measure catalogue, forecasting notes and recommendations is available in [`nhs_project_documentation.docx`](./docs/nhs_project_documentation.docx).
 
 ---
 
@@ -433,3 +475,4 @@ This project uses publicly available NHS open data for portfolio and educational
 **Desmond Ezekwem** · Data Analyst · 2025
 
 ---
+
