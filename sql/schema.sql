@@ -4,7 +4,7 @@
 -- using a star schema design.
 -- Execution order:
 --   1. Create database
---   2. Create lookup tables (dates, regions, drugs)
+--   2. Create dimension tables (dates, regions, drugs)
 --   3. Create fact table last (references all three lookup tables)
 
 -- Database

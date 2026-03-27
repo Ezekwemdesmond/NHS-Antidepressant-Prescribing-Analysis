@@ -9,13 +9,9 @@ import re
 import logging
 from urllib.parse import urljoin
 
-# =============================================================================
+
 # LOGGING CONFIGURATION
-# =============================================================================
 # Logs to both the console and a persistent log file for auditability.
-# In a production pipeline, you would ship these logs to a centralised
-# logging service (e.g. AWS CloudWatch, Azure Monitor).
-# =============================================================================
 
 os.makedirs('pca_data/raw', exist_ok=True)
 os.makedirs('pca_data/logs', exist_ok=True)
@@ -31,17 +27,11 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# =============================================================================
-# CONSTANTS
-# =============================================================================
-# Centralising constants at the top of the file means any path or configuration
-# change only needs to be made in one place — standard practice in production
-# code. Never hardcode these values inside methods.
-# =============================================================================
+# Constants
 
 BASE_URL          = "https://opendata.nhsbsa.net"
 DATASET_URL       = f"{BASE_URL}/dataset/prescription-cost-analysis-pca-monthly-data"
-RAW_DATA_DIR      = "pca_data/raw"           # Raw CSVs — never modified after download
+RAW_DATA_DIR      = "pca_data/raw"           # Raw CSVs
 COMBINED_DATA_DIR = "pca_data"               # Combined/processed output
 LOG_DIR           = "pca_data/logs"
 DOWNLOAD_LOG_PATH = f"{LOG_DIR}/download_log.csv"
@@ -60,9 +50,9 @@ REQUEST_HEADERS = {
 }
 
 
-# =============================================================================
+
 # DOWNLOAD LOG UTILITIES
-# =============================================================================
+
 # The download log is a CSV file that records every file downloaded:
 # what was downloaded, when, from where, and whether it succeeded.
 #
@@ -72,7 +62,7 @@ REQUEST_HEADERS = {
 #   2. INCREMENTAL   — The log lets the scraper skip files already downloaded
 #      LOADING          on a re-run, rather than hammering the NHS BSA server
 #                      again unnecessarily.
-# =============================================================================
+
 
 def _initialise_download_log():
     """
@@ -95,7 +85,7 @@ def _log_download(year_month, filename, source_url,
     Append a single record to the download log.
 
     Parameters
-    ----------
+    
     year_month      : str   — e.g. '202101'
     filename        : str   — local filename saved to RAW_DATA_DIR
     source_url      : str   — the URL the file was downloaded from
@@ -129,7 +119,7 @@ def _get_already_downloaded():
     re-downloading it from the NHS BSA server.
 
     Returns
-    -------
+
     set of str — e.g. {'202101', '202102', '202103'}
     """
     if not os.path.exists(DOWNLOAD_LOG_PATH):
@@ -145,9 +135,8 @@ def _get_already_downloaded():
     return already_downloaded
 
 
-# =============================================================================
-# SCRAPER CLASS
-# =============================================================================
+# Scraper Class
+
 
 class NHSPCADataScraper:
     """
@@ -165,7 +154,7 @@ class NHSPCADataScraper:
     in line with the separation of concerns principle.
 
     Usage
-    -----
+
         scraper = NHSPCADataScraper()
         downloaded_files = scraper.scrape_all_data(start_date='202101')
         scraper.combine_datasets(downloaded_files)
@@ -190,9 +179,9 @@ class NHSPCADataScraper:
         logger.info(f"Raw data directory  : {RAW_DATA_DIR}")
         logger.info(f"Download log        : {DOWNLOAD_LOG_PATH}")
 
-    # -------------------------------------------------------------------------
-    # DATASET DISCOVERY
-    # -------------------------------------------------------------------------
+ 
+    # Data discovery
+   
 
     def get_available_datasets(self):
         """
@@ -200,7 +189,7 @@ class NHSPCADataScraper:
         monthly PCA dataset links.
 
         Returns
-        -------
+       
         list of dict — each dict contains 'title', 'url', 'resource_id'
         """
         logger.info(f"Fetching dataset index from: {self.dataset_url}")
@@ -241,15 +230,15 @@ class NHSPCADataScraper:
         Parse a dataset title and extract the year-month as a 6-digit string.
 
         Example
-        -------
+        
         'Prescription Cost Analysis (PCA) - Jan 2021' → '202101'
 
         Parameters
-        ----------
+        
         title : str
 
         Returns
-        -------
+     
         str or None — '202101' format, or None if parsing fails
         """
         month_map = {
@@ -279,12 +268,12 @@ class NHSPCADataScraper:
         from start_date onwards, and sort them chronologically.
 
         Parameters
-        ----------
+       
         datasets   : list of dict
         start_date : str — '202101' format
 
         Returns
-        -------
+    
         list of dict — filtered and sorted
         """
         filtered = []
@@ -300,20 +289,20 @@ class NHSPCADataScraper:
         )
         return filtered
 
-    # -------------------------------------------------------------------------
-    # DOWNLOAD
-    # -------------------------------------------------------------------------
+ 
+    # Download
+
 
     def _get_download_url(self, resource_url):
         """
         Visit a resource page and extract the direct CSV download URL.
 
         Parameters
-        ----------
+       
         resource_url : str — the resource detail page URL
 
         Returns
-        -------
+   
         str or None — direct download URL, or None if not found
         """
         try:
@@ -357,13 +346,13 @@ class NHSPCADataScraper:
         all downstream processing.
 
         Parameters
-        ----------
+      
         download_url : str  — direct URL to the CSV file
         filename     : str  — local filename to save as (e.g. 'PCA_202101.csv')
         year_month   : str  — '202101' format, used for logging
 
         Returns
-        -------
+       
         str or None — full local filepath if successful, None if failed
         """
         filepath = os.path.join(RAW_DATA_DIR, filename)
@@ -446,9 +435,9 @@ class NHSPCADataScraper:
                 logger.info(f"Removed partial file: {filepath}")
             return None
 
-    # -------------------------------------------------------------------------
-    # ORCHESTRATION
-    # -------------------------------------------------------------------------
+    
+    # Orchestration
+
 
     def scrape_all_data(self, start_date="202101", delay_between_requests=2):
         """
@@ -460,12 +449,12 @@ class NHSPCADataScraper:
         practice when scraping public sector websites.
 
         Parameters
-        ----------
+        
         start_date              : str — '202101' format, inclusive lower bound
         delay_between_requests  : int — seconds to wait between downloads
 
         Returns
-        -------
+       
         list of dict — metadata for each successfully downloaded file,
                        including 'date', 'title', 'filepath', 'download_url'
         """
@@ -547,9 +536,7 @@ class NHSPCADataScraper:
 
         return downloaded_files
 
-    # -------------------------------------------------------------------------
-    # COMBINING
-    # -------------------------------------------------------------------------
+    # Combining
 
     def combine_datasets(self, downloaded_files=None, output_filename="combined_pca_data.csv"):
         """
@@ -670,9 +657,8 @@ class NHSPCADataScraper:
         return output_path
 
 
-# =============================================================================
-# ENTRY POINT
-# =============================================================================
+
+# Entry point
 
 def main():
     """

@@ -34,7 +34,7 @@ STAGED_INPUT_PATH   = 'pca_data/staged_pca_data.csv'  # output of processor.py
 FORECAST_INPUT_PATH = 'pca_data/forecast.csv'         # output of forecast.py
 
 
-# CONNECTION
+# Connection
 def get_connection():
     """Connect to MySQL using credentials from the .env file."""
     try:
@@ -52,7 +52,7 @@ def get_connection():
         raise
 
 
-# LOAD DIMENSION TABLES
+# Load dimension tables
 def load_dates(conn, df):
     """
     Insert one row per unique year-month into dates.
@@ -115,7 +115,7 @@ def load_drugs(conn, df):
     logger.info(f"drugs: {inserted} new rows inserted.")
 
 
-# LOAD FACT TABLE
+# Load fact table
 def load_prescriptions(conn, df):
     """
     Load all prescription records into prescriptions.
@@ -180,7 +180,7 @@ def load_prescriptions(conn, df):
     logger.info(f"prescriptions: {inserted:,} new rows inserted.")
 
 
-# LOAD FORECAST TABLE
+# Load forecast table
 def load_forecast(conn, df):
     """
     Load the Prophet forecast output into the forecast table.
@@ -272,7 +272,7 @@ def main():
         "      If not, run sql/01_schema.sql and sql/04_forecast_schema.sql first."
     )
 
-    # ── Load staged CSV ───────────────────────────────────────────────────────
+    #  Load staged CSV
     if not os.path.exists(STAGED_INPUT_PATH):
         raise FileNotFoundError(
             f"Staged file not found: {STAGED_INPUT_PATH}\n"
@@ -283,7 +283,7 @@ def main():
     df = pd.read_csv(STAGED_INPUT_PATH)
     logger.info(f"Loaded {len(df):,} rows from staged CSV.")
 
-    # ── Connect and load ──────────────────────────────────────────────────────
+    # Connect and load
     conn = get_connection()
 
     try:

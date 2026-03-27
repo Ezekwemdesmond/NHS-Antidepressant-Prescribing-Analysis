@@ -68,7 +68,7 @@ def fit_and_forecast(monthly, target_col, label, changepoint_scale):
     # Initialise model
     # yearly_seasonality=True — captures annual prescribing patterns (e.g. March surge)
     # weekly/daily seasonality=False — data is monthly, not daily/weekly
-    # interval_width — 80% CI matches the Power BI design template
+    # interval_width — 80% CI
     # changepoints=['2022-01-01'] — explicitly marks the Sertraline genericisation
     # structural break so Prophet models it cleanly rather than auto-detecting it.
     model = Prophet(

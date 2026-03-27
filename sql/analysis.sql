@@ -1,36 +1,12 @@
--- =============================================================================
--- 02_analysis.sql
--- NHS Antidepressant Prescribing Analysis — SQL Analysis Queries
--- =============================================================================
--- This script translates all key findings from the Jupyter notebook into
--- pure SQL queries against the nhs_prescribing star schema.
---
--- Each query is self-contained and can be run independently.
--- Queries are organised to mirror the structure of the notebook analysis:
---
---   Section 1 — National Overview
---   Section 2 — Monthly Trends
---   Section 3 — Drug-Level Analysis
---   Section 4 — Regional Analysis
---   Section 5 — Sertraline Deep Dive
---
--- Note: `year` and `month` are reserved words in MySQL — backticks required.
---
--- To run individual queries:
---   Open MySQL Workbench → paste query → click the lightning bolt ⚡
--- =============================================================================
+
 
 USE nhs_prescribing;
 
 
--- =============================================================================
+
 -- SECTION 1 — NATIONAL OVERVIEW
--- =============================================================================
 
-
--- -----------------------------------------------------------------------------
 -- 1.1 Total items and total cost nationally across the entire period
--- -----------------------------------------------------------------------------
 
 SELECT
     SUM(p.items)                                AS total_items,
@@ -39,11 +15,7 @@ SELECT
 FROM prescriptions p;
 
 
--- -----------------------------------------------------------------------------
 -- 1.2 Total items and total cost by year — national annual summary
--- Mirrors the bar charts in the notebook showing divergent trends:
--- items increasing while costs decreased and stabilised.
--- -----------------------------------------------------------------------------
 
 SELECT
     d.`year`,
@@ -56,10 +28,7 @@ GROUP BY d.`year`
 ORDER BY d.`year`;
 
 
--- -----------------------------------------------------------------------------
 -- 1.3 Annual mean monthly cost — how average monthly spend changed per year
--- Mirrors the 'Annual Mean Monthly National Prescribing Cost' bar chart.
--- -----------------------------------------------------------------------------
 
 SELECT
     d.`year`,
@@ -70,10 +39,7 @@ GROUP BY d.`year`
 ORDER BY d.`year`;
 
 
--- -----------------------------------------------------------------------------
 -- 1.4 Annual min, max, and mean monthly cost — distribution by year
--- Mirrors the boxplot showing reduced cost variability from 2022 onwards.
--- -----------------------------------------------------------------------------
 
 SELECT
     d.`year`,
@@ -94,15 +60,11 @@ GROUP BY d.`year`
 ORDER BY d.`year`;
 
 
--- =============================================================================
+
 -- SECTION 2 — MONTHLY TRENDS
--- =============================================================================
 
 
--- -----------------------------------------------------------------------------
 -- 2.1 Monthly national total items and cost — full time series
--- Mirrors the two monthly trend line charts in the notebook.
--- -----------------------------------------------------------------------------
 
 SELECT
     d.year_month,
@@ -117,10 +79,8 @@ GROUP BY d.year_month, d.`year`, d.month_name
 ORDER BY d.year_month;
 
 
--- -----------------------------------------------------------------------------
 -- 2.2 Year-over-year change in monthly cost
 -- Identifies when the cost reduction happened most sharply.
--- -----------------------------------------------------------------------------
 
 SELECT
     this_year.year_month,
@@ -148,15 +108,11 @@ LEFT JOIN (
 ORDER BY this_year.year_month;
 
 
--- =============================================================================
+
 -- SECTION 3 — DRUG-LEVEL ANALYSIS
--- =============================================================================
 
 
--- -----------------------------------------------------------------------------
 -- 3.1 Top 10 most prescribed antidepressants by total items (2021–2025)
--- Mirrors the left-hand bar chart in the notebook.
--- -----------------------------------------------------------------------------
 
 SELECT
     dr.bnf_chemical_substance,
@@ -170,11 +126,8 @@ ORDER BY total_items DESC
 LIMIT 10;
 
 
--- -----------------------------------------------------------------------------
 -- 3.2 Top 10 most expensive antidepressants by total cost (2021–2025)
--- Mirrors the right-hand bar chart in the notebook.
 -- Highlights drugs like Venlafaxine that are expensive despite lower volume.
--- -----------------------------------------------------------------------------
 
 SELECT
     dr.bnf_chemical_substance,
@@ -188,12 +141,8 @@ ORDER BY total_cost_gbp DESC
 LIMIT 10;
 
 
--- -----------------------------------------------------------------------------
 -- 3.3 Items and cost percentage contribution for every drug
 -- Shows which drugs are cost-efficient vs expensive.
--- Uses a window function to calculate percentages in a single query.
--- Mirrors the contribution percentage table in the notebook.
--- -----------------------------------------------------------------------------
 
 SELECT
     dr.bnf_chemical_substance,
@@ -208,9 +157,7 @@ GROUP BY dr.bnf_chemical_substance
 ORDER BY total_items DESC;
 
 
--- -----------------------------------------------------------------------------
 -- 3.4 Annual trend for the top 5 drugs by items
--- -----------------------------------------------------------------------------
 
 SELECT
     d.`year`,
@@ -235,15 +182,10 @@ GROUP BY d.`year`, dr.bnf_chemical_substance
 ORDER BY d.`year`, total_items DESC;
 
 
--- =============================================================================
 -- SECTION 4 — REGIONAL ANALYSIS
--- =============================================================================
 
 
--- -----------------------------------------------------------------------------
 -- 4.1 Annual items and cost by region
--- Mirrors Table 1 and Table 2 from the notebook.
--- -----------------------------------------------------------------------------
 
 SELECT
     r.region_name,
@@ -258,11 +200,7 @@ GROUP BY r.region_name, d.`year`
 ORDER BY r.region_name, d.`year`;
 
 
--- -----------------------------------------------------------------------------
 -- 4.2 Percentage change in items and cost per region (2021 vs 2025)
--- Mirrors the Change_2021_2025 column in the notebook pivot tables.
--- -----------------------------------------------------------------------------
-
 SELECT
     r.region_name,
     SUM(CASE WHEN d.`year` = 2021 THEN p.items ELSE 0 END)          AS items_2021,
@@ -287,10 +225,7 @@ GROUP BY r.region_name
 ORDER BY items_pct_change DESC;
 
 
--- -----------------------------------------------------------------------------
 -- 4.3 Monthly items and cost by region — full time series
--- Feeds directly into Power BI regional trend visuals.
--- -----------------------------------------------------------------------------
 
 SELECT
     d.year_month,
@@ -306,14 +241,10 @@ GROUP BY d.year_month, d.`year`, r.region_name
 ORDER BY d.year_month, r.region_name;
 
 
--- =============================================================================
 -- SECTION 5 — SERTRALINE DEEP DIVE
--- =============================================================================
 
 
--- -----------------------------------------------------------------------------
 -- 5.1 Sertraline overall summary — items, cost, and contribution percentages
--- -----------------------------------------------------------------------------
 
 SELECT
     dr.bnf_chemical_substance,
@@ -327,9 +258,7 @@ JOIN drugs dr ON p.drug_id = dr.drug_id
 WHERE dr.bnf_chemical_substance = 'Sertraline hydrochloride';
 
 
--- -----------------------------------------------------------------------------
 -- 5.2 Sertraline annual cost trend
--- -----------------------------------------------------------------------------
 
 SELECT
     d.`year`,
@@ -344,9 +273,7 @@ GROUP BY d.`year`
 ORDER BY d.`year`;
 
 
--- -----------------------------------------------------------------------------
 -- 5.3 Sertraline monthly cost trend — full time series
--- -----------------------------------------------------------------------------
 
 SELECT
     d.year_month,
@@ -361,10 +288,7 @@ GROUP BY d.year_month
 ORDER BY d.year_month;
 
 
--- -----------------------------------------------------------------------------
 -- 5.4 Sertraline mean cost per item by region
--- Key insight: South East highest, North East & Yorkshire lowest.
--- -----------------------------------------------------------------------------
 
 SELECT
     r.region_name,
@@ -379,10 +303,8 @@ GROUP BY r.region_name
 ORDER BY mean_cost_per_item DESC;
 
 
--- -----------------------------------------------------------------------------
 -- 5.5 All drugs — cost per item vs national average
 -- Negative pct_above_below_national_avg means cheaper than average.
--- -----------------------------------------------------------------------------
 
 SELECT
     dr.bnf_chemical_substance,
@@ -400,17 +322,14 @@ GROUP BY dr.bnf_chemical_substance
 ORDER BY total_items DESC
 LIMIT 10;
 
--- =============================================================================
+
 -- SECTION 6 — FORECAST QUERIES
 -- Requires 04_forecast_schema.sql to have been run and forecast.py output
 -- loaded into MySQL via loader.py before these queries will return results.
--- =============================================================================
 
 
--- -----------------------------------------------------------------------------
 -- 6.1 Full forecast table — historical fitted values and 12-month forecast
 -- is_forecast=0 for historical rows, is_forecast=1 for forecast rows.
--- -----------------------------------------------------------------------------
 
 SELECT
     `year_month`,
@@ -425,10 +344,8 @@ FROM forecast
 ORDER BY `year_month`;
 
 
--- -----------------------------------------------------------------------------
 -- 6.2 12-month forward forecast only — the projected period
 -- Shows items, cost and cost per item with 80% confidence intervals.
--- -----------------------------------------------------------------------------
 
 SELECT
     `year_month`,
@@ -446,10 +363,8 @@ WHERE is_forecast = 1
 ORDER BY `year_month`;
 
 
--- -----------------------------------------------------------------------------
 -- 6.3 Forecast summary — total projected items and cost for the 12-month period
 -- Provides the headline numbers for the Forecast KPI cards in Power BI.
--- -----------------------------------------------------------------------------
 
 SELECT
     COUNT(*)                         AS forecast_months,
@@ -462,11 +377,9 @@ FROM forecast
 WHERE is_forecast = 1;
 
 
--- -----------------------------------------------------------------------------
 -- 6.4 Actual vs forecast comparison — model accuracy on historical period
 -- Compares actual values against Prophet fitted values for the training period.
 -- Lower mean absolute percentage error (MAPE) = better model accuracy.
--- -----------------------------------------------------------------------------
 
 SELECT
     `year_month`,
