@@ -1,5 +1,4 @@
 # 🏥 NHS Antidepressant Prescribing Analysis
-### End-to-End Data Analytics Portfolio Project · England · 2021–2025
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
@@ -138,42 +137,44 @@ The efficiency gap measures how disproportionate a drug's cost share is relative
 
 All seven NHS England regions experienced the same pattern: rising volumes, falling costs. But the rates differ significantly.
 
-| Region | Items 2021 | Items 2025 | Items Growth | Cost 2021 | Cost 2025 | Cost Change | CPI |
-|--------|-----------|-----------|-------------|----------|----------|-------------|-----|
-| North East & Yorkshire | 17.75M | 22.42M | **+26.3%** | £54.9M | £45.1M | -17.8% | £2.33 |
-| Midlands | 15.44M | 18.01M | **+16.7%** | £43.7M | £43.7M | -20.4% | — |
-| London | 8.64M | 9.61M | **+11.1%** | £32.0M | £23.0M | -28.1% | — |
-| East of England | 9.70M | 10.75M | **+10.9%** | £32.9M | £26.2M | -20.4% | — |
-| South East | 14.40M | — | — | — | — | — | **£3.31** |
-| North West | 12.47M | 14.02M | **+12.4%** | £42.4M | £31.2M | -26.4% | — |
+| Region | Items 2021 | Items 2025 | Items Change | Cost 2021 | Cost 2025 | Cost Change |
+|--------|-----------|-----------|-------------|----------|----------|-------------|
+| North East And Yorkshire | 17,750,721 | 22,419,790 | **+26.3%** | £54,887,870 | £45,126,663 | **-17.8%** |
+| Midlands | 15,436,017 | 18,012,360 | **+16.7%** | £54,660,729 | £43,707,159 | **-20.0%** |
+| North West | 12,468,335 | 14,020,170 | **+12.4%** | £42,449,534 | £31,249,553 | **-26.4%** |
+| South East | 10,639,433 | 11,607,354 | **+9.1%** | £44,718,283 | £33,548,520 | **-25.0%** |
+| East Of England | 9,699,149 | 10,752,215 | **+10.9%** | £32,898,810 | £26,161,565 | **-20.5%** |
+| London | 8,644,409 | 9,605,475 | **+11.1%** | £32,040,318 | £23,029,904 | **-28.1%** |
+| South West | 8,323,915 | 8,673,972 | **+4.2%** | £29,824,347 | £21,476,388 | **-28.0%** |
 
 **Key regional findings:**
 
-**North East & Yorkshire is the fastest growing region** — items grew by **+26.3%** from 17.75M (2021) to 22.42M (2025), well above the national average of +14.6%. This suggests either faster population growth, improved diagnosis rates, or changing prescribing practices in this region.
+**North East And Yorkshire is the fastest growing region** — items grew by **+26.3%** from 17,750,721 (2021) to 22,419,790 (2025), nearly double the national average of +14.6%. This suggests faster growth in diagnosis rates or changes in prescribing culture in this region.
 
-**South East has the highest cost per item at £3.31** — compared to North East & Yorkshire's lowest at £2.33. That is a **42% cost premium per prescription** for the same drug class. The South East's higher CPI likely reflects a different drug mix (more branded/newer antidepressants) rather than pricing differences, since NHS drug pricing is nationally negotiated.
+**South West is the slowest growing region** — at just **+4.2%** growth (8,323,915 to 8,673,972 items), South West grew at less than a third of the national average. Despite this, it achieved the joint-largest cost reduction at **-28.0%**, reducing spend from £29,824,347 to £21,476,388.
 
-**London achieved the largest cost reduction** — despite **+11.1% volume growth**, London's total cost fell by **-28.1%**, the steepest percentage reduction of any region. This suggests London led the adoption of generic alternatives.
+**South East has the highest cost per item at £3.31** — compared to North East And Yorkshire's lowest at £2.33. That is a **42% cost premium per prescription** for the same drug class. The South East's higher CPI likely reflects a different drug mix (more branded or newer antidepressants) rather than pricing differences, since NHS drug pricing is nationally negotiated.
 
-**Recommendation:** NHS England should investigate the prescribing mix in South East vs North East & Yorkshire. Aligning South East's drug mix with the more cost-efficient North East & Yorkshire prescribing patterns could yield **£8–12M in annual savings** based on the CPI differential across ~67M annual items.
+**London and South West achieved the largest cost reductions** — both at approximately **-28%**, reducing spend significantly despite continued volume growth. London fell from £32,040,318 to £23,029,904 (-28.1%) while South West fell from £29,824,347 to £21,476,388 (-28.0%).
+
+**North West had the third highest cost reduction at -26.4%** — falling from £42,449,534 to £31,249,553 despite +12.4% items growth.
+
+**Recommendation:** NHS England should investigate the prescribing mix in South East vs North East And Yorkshire. Aligning South East's drug mix with the more cost-efficient North East And Yorkshire prescribing patterns could yield **£8–12M in annual savings** based on the CPI differential across the region's ~11.6M annual items.
 
 ---
 
-### 5. Seasonal Patterns — March Surges, February Dips
+### 5. Seasonal Patterns — February Consistently the Lowest Month
 
-Monthly analysis reveals a consistent seasonal rhythm that repeats every year across the entire 2021–2025 period:
+The matrix heatmap below shows total items prescribed by month and year across 2021–2025.
 
-- **March** consistently shows the largest single-month surge in prescriptions
-- **February** consistently shows the lowest monthly volume of the year
-- The March-to-February swing is approximately **+10% month-on-month** in items
+![Seasonal Prescribing Heatmap](images/matrix_heatmap.png)
+*Monthly prescribing volumes by year — darker blue = higher volume · Source: NHS BSA PCA Data*
 
-This pattern is likely driven by:
-- GP appointment cycles and repeat prescription scheduling (28-day vs 56-day supplies)
-- Seasonal mental health demand (post-winter, pre-spring transition)
-- NHS prescription charge exemption cycles
-
-**The May–June 2024 anomaly:** A sharp cost spike occurred in May–June 2024 that was **not accompanied by a corresponding volume increase**. Monthly cost jumped by approximately **£2–3M above trend** while items remained stable. This suggests a temporary procurement or pricing disruption affecting specific high-cost drugs — most likely Venlafaxine given its volatile unit cost history. This anomaly was treated as an outlier in the forecasting model.
-
+**Key observations:**
+- **February is consistently the lowest or near-lowest month** — the only truly reliable seasonal signal across all five years, ranging from 6,363,902 items in 2021 to 7,268,417 in 2025
+- **There is no single consistent peak month** — December led in 2021 (7,389,273) and 2025 (8,447,750 — the highest single month in the entire dataset), March led in 2022 (7,461,120) and 2023 (7,774,244), October led in 2024 (8,045,117)
+- **The dominant signal is year-on-year growth, not seasonality** — every month in 2025 prescribed more items than the same month in 2021 without exception. The matrix gradient runs left to right (progressively darker each year) confirming annual growth as the primary driver
+- **The May–June 2024 cost anomaly** — a sharp cost spike occurred in May–June 2024 that was not accompanied by a corresponding volume increase, suggesting a temporary procurement or pricing disruption rather than a change in prescribing behaviour. This anomaly was treated as an outlier in the forecasting model
 ---
 
 ### 6. Key Influencer Analysis — What Drives High Cost Per Item?
@@ -273,10 +274,10 @@ NHS-Antidepressant-Prescribing-Analysis/
 ├── loader.py                     # MySQL database loader (idempotent)
 │
 ├── sql/
-│   ├── 01_schema.sql             # Star schema DDL
-│   ├── 02_analysis.sql           # 20 analytical SQL queries (6 sections)
-│   ├── 03_load.sql               # LOAD DATA INFILE alternative
-│   └── 04_forecast_schema.sql    # Forecast table DDL
+│   ├── schema.sql             # Star schema DDL
+│   ├── analysis.sql           # 20 analytical SQL queries (6 sections)
+│   |
+│   └── forecast.sql           # Forecast table DDL
 │
 ├── pca_data/
 │   ├── raw/                      # Landing zone for downloaded CSVs
@@ -288,7 +289,7 @@ NHS-Antidepressant-Prescribing-Analysis/
 ├── nhs_analysis.pbix             # Power BI dashboard
 ├── nhs_project_documentation.docx # Full project documentation
 ├── requirements.txt              # Python dependencies
-├── .env.example                  # Environment variable template
+├── .env                          # Environment variable template
 └── README.md
 ```
 
@@ -429,10 +430,6 @@ This project uses publicly available NHS open data for portfolio and educational
 
 ## 👤 Author
 
-**Desmond Ezekwem**
+**Desmond Ezekwem** · Data Analyst · 2025
 
 ---
-
-<p align="center">
-  <em>Built with real NHS open data · Open Government Licence v3.0 · 445M items · £1.20bn · 60 months</em>
-</p>
