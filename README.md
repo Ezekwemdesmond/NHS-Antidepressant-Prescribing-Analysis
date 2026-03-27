@@ -472,7 +472,7 @@ This project uses publicly available NHS open data for portfolio and educational
 
 ## 👤 Author
 
-**Desmond Ezekwem** · Data Analyst · 2025
+**Desmond Ezekwem**
 
 ---
 
