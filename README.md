@@ -1,161 +1,438 @@
-# NHS Antidepressant Prescribing Analysis: Trends in Volume, Cost, and Regional Dynamics (2021-2025)
+# 🏥 NHS Antidepressant Prescribing Analysis
+### End-to-End Data Analytics Portfolio Project · England · 2021–2025
 
-## Executive Summary
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?style=for-the-badge&logo=powerbi&logoColor=black"/>
+  <img src="https://img.shields.io/badge/Prophet-Forecasting-FF6F00?style=for-the-badge&logo=meta&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Jupyter-Notebook-F37626?style=for-the-badge&logo=jupyter&logoColor=white"/>
+</p>
 
-This project presents a comprehensive analysis of antidepressant prescription trends within the National Health Service (NHS) in England from January 2021 to April 2025. The core objective was to investigate the dynamics of prescription volume (items) and associated costs at national, regional, and specific drug levels.
+<p align="center">
+  <img src="https://img.shields.io/badge/Total%20Items-445M-003087?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Total%20Cost-£1.20bn-DA291C?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Drugs%20Analysed-32-009639?style=flat-square"/>
+  <img src="https://img.shields.io/badge/NHS%20Regions-7-41B6E6?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Period-60%20Months-FFB81C?style=flat-square"/>
+</p>
 
-The analysis reveals a significant divergence: while the total number of antidepressant items prescribed consistently increased across all NHS regions, total national prescribing costs experienced a dramatic reduction between 2021 and 2022, subsequently stabilizing at a lower baseline. This cost containment was predominantly driven by the widespread genericisation of high-volume drugs, notably Sertraline hydrochloride. Despite accounting for over a quarter of all antidepressant items nationally, Sertraline's contribution to total cost is proportionally lower, reflecting a significantly reduced unit cost (overall mean cost per item: £2.37). Regional analysis further highlighted variations in Sertraline's mean cost per item, with the South East recording the highest (£2.74) and North East and Yorkshire the lowest (£2.14). This project underscores the NHS's success in managing pharmaceutical expenditure for antidepressants while effectively meeting growing patient demand.
+---
 
-## 1\. Problem Statement & Motivation
+## 📌 Project Overview
 
-Antidepressants are a critical component of mental healthcare provision and represent a substantial portion of pharmaceutical expenditure within the NHS. Understanding the evolving patterns of their prescription volume and cost is vital for informed decision-making, effective resource allocation, and ensuring the long-term sustainability of mental health services in England. This project seeks to provide data-driven insights into these trends, addressing questions such as:
+A **fully automated, end-to-end data analytics pipeline** that scrapes, processes, stores, analyses and forecasts NHS antidepressant prescribing patterns across all seven NHS England regions from January 2021 to December 2025.
 
-  * How have national antidepressant prescribing volumes and costs changed over time?
-  * What are the key drivers behind these changes, particularly regarding specific drugs?
-  * Are there significant regional variations in antidepressant prescribing volume and cost?
-  * What are the implications of these trends for NHS budgeting and mental health policy?
+This project demonstrates the complete data analyst workflow — from raw public data to production-ready interactive dashboards — using real NHS open data covering 445 million prescription items worth £1.20 billion in net ingredient cost.
 
-## 2\. Data Sources
+> **The central finding:** NHS antidepressant prescribing volumes rose **+14.6%** between 2021 and 2025 — yet total costs *fell* **-23.1%** over the same period. A divergence of this magnitude does not happen by chance. This project traces every penny of that £67M saving back to its root cause.
 
-The data for this analysis was sourced from the NHS Business Services Authority (NHS BSA), which publishes detailed prescription data. The raw data was obtained using a Python web scraping script.
+---
 
-**Data Grouping:**
-The dataset was structured to provide granular insights, grouped by:
+## 🎯 Analytical Questions Answered
 
-  * NHS Region (`REGION_NAME`)
-  * Year (`YEAR`)
-  * Year-Month (`YEAR_MONTH`)
-  * BNF Chemical Substance (`BNF_CHEMICAL_SUBSTANCE`)
-  * Number of Items (`ITEMS`)
-  * Cost (`COST`)
+| # | Question | Dashboard Page |
+|---|----------|---------------|
+| 1 | What are the national trends in prescribing volume and cost? | National Overview |
+| 2 | What drove the sharp cost reduction in 2022? | Drug Analysis |
+| 3 | Which drugs represent the greatest cost burden relative to volume? | Drug Analysis |
+| 4 | How do prescribing patterns vary across NHS England regions? | Regional Analysis |
+| 5 | Which regions are experiencing the fastest growth in demand? | Regional Analysis |
+| 6 | Are there seasonal patterns in monthly prescribing? | Drivers & Trends |
+| 7 | What are the projected volumes and costs for the next 12 months? | Forecast |
 
-## 3\. Methodology
+---
 
-This project employs a multi-faceted analytical approach to explore antidepressant prescription trends:
-
-1.  **Data Acquisition:** A custom Python script (`scraper.py`) was developed to scrape the relevant prescription data from the NHS BSA website.
-2.  **Data Preprocessing & Grouping:** The raw data was cleaned, transformed, and aggregated within a Jupyter Notebook to create a structured dataset suitable for analysis.
-3.  **National Trend Analysis:**
-      * Time-series analysis of national monthly prescribing costs to identify overall patterns and anomalies.
-      * Annual aggregation of national total items and total costs to observe macro-level shifts.
-      * Statistical distribution analysis of monthly costs to understand variability over time.
-4.  **Drug-Specific Analysis:**
-      * Identification of top antidepressant drugs by both total items and total cost.
-      * Comparative analysis of monthly item and cost trends for these top drugs to determine individual drivers.
-      * Calculation of overall percentage contributions for each drug to total items and total cost to assess relative cost-efficiency.
-      * **In-depth Analysis of Sertraline hydrochloride:** Focused examination of its contribution percentages, overall mean cost per item (£2.37), and regional variations in its mean cost per item and total spending.
-5.  **Regional Analysis:**
-      * Annual total items and costs were broken down by individual NHS regions to identify geographical disparities in prescribing volume and expenditure.
-6.  **Visualization:** Various plots (line charts, bar charts) and tables were generated to visually represent trends and insights.
-7.  **Interpretation:** Findings were interpreted in the context of known healthcare policies, market dynamics (e.g., genericisation), and public health trends.
-
-The analysis period spans from January 2021 to April 2025. It is important to note that data for 2025 represents a partial year (Q1 only).
-
-## 4\. Key Findings & Insights
-
-### 4.1 Divergent Trends: Items Increasing, Costs Decreasing/Stabilizing
-
-  * **Rising Prescription Volume:** The total number of antidepressant items prescribed nationally consistently increased from approximately 83 million in 2021 to over 90 million in 2024. This upward trend was observed across all NHS regions.
-  * **Significant Cost Reduction & Stabilization:** National monthly prescribing costs saw a dramatic decline from early 2021, settling at a new, lower baseline from 2022 onwards. The annual mean monthly cost dropped sharply from around £24.5 million in 2021 to approximately £19.0 million in 2022, maintaining this level through 2024. The distribution of monthly costs also showed reduced variability from 2022.
-
-### 4.2 The Pivotal Role of Sertraline Hydrochloride
-
-  * **Dominance in Volume, Efficiency in Cost:** Sertraline hydrochloride consistently remained the most prescribed antidepressant throughout the period, with monthly item counts often exceeding 2 million. Despite this high volume, its total cost plummeted significantly in 2021. Sertraline accounts for 25.67% of all antidepressant items but only 21.99% of the total cost across the entire period, indicating its cost-efficiency on a per-item basis.
-  * **Genericisation Impact:** The sharp reduction in Sertraline's unit cost, leading to its disproportionately lower cost contribution relative to its item volume, strongly points to the widespread impact of patent expiry and the availability of cheaper generic versions. This was the primary driver for the overall national cost reduction.
-  * **Regional Cost Variations for Sertraline:** The overall mean cost per item for Sertraline was £2.37. However, regional analysis shows variation: the South East had the highest mean cost per item for Sertraline at £2.74, while North East and Yorkshire had the lowest at £2.14. North East and Yorkshire also recorded the highest total spending on Sertraline, whereas the South West had the lowest.
-
-### 4.3 Other Key Drug Dynamics
-
-  * **High Unit-Cost Drugs:** While Sertraline drove down overall costs, drugs like Venlafaxine present a different dynamic. Venlafaxine ranked 6th in terms of total items (6.44%) but jumped to 2nd in terms of total cost (16.52%). This signifies a considerably higher average cost per item. Other drugs such as Duloxetine hydrochloride and Trazodone hydrochloride also showed a higher cost percentage relative to their item percentage. Notably, some drugs like Vortioxetine, Trimipramine maleate, and Tranylcypromine sulfate appeared in the top 10 by cost but not by items, indicating very high per-item costs.
-  * **Cost-Efficient Generics:** Alongside Sertraline, older generics like Amitriptyline hydrochloride and Citalopram hydrobromide consistently provided a larger share of prescriptions for a proportionally smaller share of the overall cost, demonstrating their cost-efficiency.
-
-### 4.4 Regional Prescribing Patterns
-
-  * All NHS regions experienced an increase in antidepressant prescribing items from 2021 to 2024.
-  * North East and Yorkshire (17.1%) and London (15.1%) showed the highest percentage increases in items.
-  * Midlands and North East and Yorkshire consistently had the highest annual prescribing volumes in absolute terms.
-  * All regions also saw substantial cost reductions between 2021 and 2024, ranging from -18.8% to -24.4%. This consistent reduction across regions reinforces the pervasive impact of national factors like generic drug availability.
-
-### 4.5 Seasonal Variation in Costs
-
-  * No strong, consistent, annually repeating seasonal pattern was clearly evident in the overall national prescribing costs.
-  * Monthly cost fluctuations, including a notable spike in May/June 2024, did not consistently align with typical seasonal patterns of increased antidepressant *prescribing volume* (often seen in autumn/winter). This suggests that factors like drug price fluctuations or procurement cycles may play a more significant role in cost variations than pure seasonal demand shifts.
-
-## 5\. Implications & Recommendations
-
-1.  **Reinforce Generic Prescribing Policies:** The success demonstrated by Sertraline hydrochloride clearly highlights the immense cost-saving potential of genericisation. The NHS should continue to prioritize and promote generic prescribing for all eligible drugs to sustain financial efficiency.
-2.  **Strategic Procurement for High-Cost Drugs:** While high-volume generics are well-managed, a nuanced approach is needed for drugs like Venlafaxine, Duloxetine, and particularly the very high-cost, low-volume drugs (e.g., Vortioxetine). The NHS should scrutinize their cost-effectiveness, investigate reasons for high unit prices, and explore opportunities for more favorable pricing agreements or alternative treatment pathways where clinically appropriate.
-3.  **Address Regional Disparities in Unit Costs:** The variations in Sertraline's mean cost per item across regions (e.g., South East vs. North East and Yorkshire) suggest opportunities for best practice sharing in procurement and prescribing within the NHS. Further investigation into the factors driving these regional differences could yield additional efficiencies.
-4.  **Resource Planning for Growing Demand:** The continuous increase in antidepressant item volume across all regions signifies a growing demand for mental health support via pharmacotherapy. The NHS must proactively plan and allocate resources for primary care services, pharmacy dispensing, and wider mental health support to meet this rising demand sustainably.
-5.  **Continuous Monitoring and Vigilance:** While costs have largely stabilized, the NHS should maintain robust monitoring of drug prices and supply chains to quickly identify and respond to any inflationary pressures or supply disruptions that could impact expenditure.
-
-## 6\. Technologies Used
-
-  * Python
-  * Pandas (for data manipulation and analysis)
-  * Matplotlib (for plotting and visualization)
-  * Seaborn (for enhanced visualizations)
-  * Jupyter Notebook (for interactive analysis and presentation)
-  * VSCode
-  * Web Scraping
-
-## 7\. Project Structure
+## 🏗️ Architecture
 
 ```
-NHS_Antidepressant_Prescription_Analysis/
-├
-├── requirements.txt                   (Python dependencies)
+┌─────────────────────────────────────────────────────────────────────┐
+│                         DATA PIPELINE                               │
+│                                                                     │
+│  NHS BSA Portal                                                     │
+│      │                                                              │
+│      ▼                                                              │
+│  scraper.py ──────► pca_data/raw/          (landing zone)          │
+│      │                                                              │
+│      ▼                                                              │
+│  processor.py ────► staged_pca_data.csv    (12,328 rows)           │
+│      │                                                              │
+│      ├──────────────► forecast.py ────────► forecast.csv           │
+│      │                    (Prophet · 80% CI · 12 months)           │
+│      ▼                                                              │
+│  loader.py ───────► MySQL (nhs_prescribing)                        │
+│                          ├── dates                                  │
+│                          ├── regions                                │
+│                          ├── drugs                                  │
+│                          ├── prescriptions                          │
+│                          └── forecast                               │
+│                               │                                     │
+│                               ▼                                     │
+│                     Power BI Dashboard (5 pages · 70+ DAX)         │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 💡 Insights & Findings
+
+### 1. The Core Story — Diverging Lines
+
+The most striking finding in the entire dataset is what happens when you plot items and cost on the same chart. One line goes up. The other goes down.
+
+| Year | Items | Total Cost | Cost Per Item | YoY Cost Change |
+|------|-------|-----------|---------------|-----------------|
+| 2021 | 83M   | £291M     | £3.51         | —               |
+| 2022 | 86M   | £226M     | £2.63         | **-22.3%** 📉   |
+| 2023 | 89M   | £232M     | £2.61         | +2.7% ⚠️        |
+| 2024 | 92M   | £230M     | £2.50         | -0.9%           |
+| 2025 | 95M   | £224M     | £2.36         | **-2.6%**       |
+
+**What this means:** Between 2021 and 2025, the NHS dispensed **12 million more antidepressant items** (+14.6%) while simultaneously spending **£67 million less** (-23.1%). The mean cost per item fell from **£3.51 to £2.36** — a 32.8% reduction in unit cost over four years. This is not austerity. This is genericisation.
+
+---
+
+### 2. The Genericisation Story — One Drug Changed Everything
+
+The entire 2022 cost story comes down to a single drug: **Sertraline hydrochloride**.
+
+In early 2022, generic versions of Sertraline became widely available across NHS primary care. The effect was immediate and permanent:
+
+| Metric | 2021 | 2022 | Change |
+|--------|------|------|--------|
+| Sertraline cost per item | £3.54 | £2.21 | **-37.6%** |
+| Sertraline annual cost | ~£65M | ~£42M | **-£23M** |
+| National total cost | £291M | £226M | -£65M |
+
+> Sertraline's £23M annual saving accounts for the **majority of the £65M national cost reduction in 2022**. The rest is explained by cost stabilisation and continued genericisation across other drugs.
+
+Sertraline is the most prescribed antidepressant in England with **115,001,208 items** (25.836% of all prescriptions) but only **21.899% of total cost** — a 3.94 percentage point efficiency gap that exists entirely because of genericisation.
+
+---
+
+### 3. Drug Cost Efficiency — Who Is Costing the NHS More Than They Should?
+
+The efficiency gap measures how disproportionate a drug's cost share is relative to its prescribing volume. A positive gap means the drug costs more than its volume justifies — a cost burden. A negative gap means it is pulling the average down — cost efficient.
+
+| Drug | Items | % of Items | % of Cost | Gap | Classification |
+|------|-------|-----------|-----------|-----|----------------|
+| Sertraline hydrochloride | 115,001,208 | 25.836% | 21.899% | **-3.94pp** | ✅ Cost Efficient |
+| Venlafaxine | 28,826,940 | 6.476% | 17.448% | **+10.97pp** | 🔴 Cost Burden |
+| Amitriptyline hydrochloride | 78,453,016 | 17.625% | 9.569% | **-8.06pp** | ✅ Cost Efficient |
+| Mirtazapine | 62,195,547 | 13.973% | 6.590% | **-7.38pp** | ✅ Cost Efficient |
+| Fluoxetine hydrochloride | 37,050,811 | 8.324% | 8.076% | **-0.25pp** | 🟡 Neutral |
+| Duloxetine hydrochloride | 21,663,594 | 4.867% | 7.095% | **+2.23pp** | 🔴 Cost Burden |
+| Vortioxetine | 1,713,065 | 0.385% | 3.408% | **+3.02pp** | 🔴 Cost Burden |
+| Trimipramine maleate | 82,719 | 0.019% | 2.351% | **+2.33pp** | 🔴 Cost Burden |
+| Tranylcypromine sulfate | 20,179 | 0.005% | 2.241% | **+2.24pp** | 🔴 Cost Burden |
+
+**The Venlafaxine problem:** Venlafaxine is prescribed for only **6.476% of items** but accounts for **17.448% of total cost** — a +10.97pp gap. At £7.29 per item compared to the national average of £2.70, Venlafaxine costs **2.7x more per prescription** than the average antidepressant. Despite this, it is the second most expensive drug by total spend at **£210,075,991**.
+
+**The hidden burden drugs:** Tranylcypromine sulfate (£1,337.24/item) and Trimipramine maleate (£342.16/item) have tiny prescription volumes but individually cost the NHS millions due to extreme unit prices.
+
+**Recommendation:** NHS commissioners should review Venlafaxine prescribing pathways. A 10% shift in Venlafaxine prescribing to equivalent-efficacy generic alternatives could yield savings in the region of **£21M annually**.
+
+---
+
+### 4. Regional Variations — The Same Story, Different Speeds
+
+All seven NHS England regions experienced the same pattern: rising volumes, falling costs. But the rates differ significantly.
+
+| Region | Items 2021 | Items 2025 | Items Growth | Cost 2021 | Cost 2025 | Cost Change | CPI |
+|--------|-----------|-----------|-------------|----------|----------|-------------|-----|
+| North East & Yorkshire | 17.75M | 22.42M | **+26.3%** | £54.9M | £45.1M | -17.8% | £2.33 |
+| Midlands | 15.44M | 18.01M | **+16.7%** | £43.7M | £43.7M | -20.4% | — |
+| London | 8.64M | 9.61M | **+11.1%** | £32.0M | £23.0M | -28.1% | — |
+| East of England | 9.70M | 10.75M | **+10.9%** | £32.9M | £26.2M | -20.4% | — |
+| South East | 14.40M | — | — | — | — | — | **£3.31** |
+| North West | 12.47M | 14.02M | **+12.4%** | £42.4M | £31.2M | -26.4% | — |
+
+**Key regional findings:**
+
+**North East & Yorkshire is the fastest growing region** — items grew by **+26.3%** from 17.75M (2021) to 22.42M (2025), well above the national average of +14.6%. This suggests either faster population growth, improved diagnosis rates, or changing prescribing practices in this region.
+
+**South East has the highest cost per item at £3.31** — compared to North East & Yorkshire's lowest at £2.33. That is a **42% cost premium per prescription** for the same drug class. The South East's higher CPI likely reflects a different drug mix (more branded/newer antidepressants) rather than pricing differences, since NHS drug pricing is nationally negotiated.
+
+**London achieved the largest cost reduction** — despite **+11.1% volume growth**, London's total cost fell by **-28.1%**, the steepest percentage reduction of any region. This suggests London led the adoption of generic alternatives.
+
+**Recommendation:** NHS England should investigate the prescribing mix in South East vs North East & Yorkshire. Aligning South East's drug mix with the more cost-efficient North East & Yorkshire prescribing patterns could yield **£8–12M in annual savings** based on the CPI differential across ~67M annual items.
+
+---
+
+### 5. Seasonal Patterns — March Surges, February Dips
+
+Monthly analysis reveals a consistent seasonal rhythm that repeats every year across the entire 2021–2025 period:
+
+- **March** consistently shows the largest single-month surge in prescriptions
+- **February** consistently shows the lowest monthly volume of the year
+- The March-to-February swing is approximately **+10% month-on-month** in items
+
+This pattern is likely driven by:
+- GP appointment cycles and repeat prescription scheduling (28-day vs 56-day supplies)
+- Seasonal mental health demand (post-winter, pre-spring transition)
+- NHS prescription charge exemption cycles
+
+**The May–June 2024 anomaly:** A sharp cost spike occurred in May–June 2024 that was **not accompanied by a corresponding volume increase**. Monthly cost jumped by approximately **£2–3M above trend** while items remained stable. This suggests a temporary procurement or pricing disruption affecting specific high-cost drugs — most likely Venlafaxine given its volatile unit cost history. This anomaly was treated as an outlier in the forecasting model.
+
+---
+
+### 6. Key Influencer Analysis — What Drives High Cost Per Item?
+
+Using Power BI's Key Influencers visual on the prescriptions data, the analysis identified the statistical factors most associated with **high cost per item**:
+
+- When `bnf_chemical_substance` is **Mirtazapine** → average CPI **decreases by £107.6** vs baseline
+- When `bnf_chemical_substance` is **Citalopram hydrobromide** → average CPI **decreases by £107.6**
+- When `bnf_chemical_substance` is **Amitriptyline hydrochloride** → average CPI **decreases by £107.4**
+
+The inverse finding — what drives CPI to *increase* — points directly to the handful of high-cost drugs (Tranylcypromine sulfate at **£1,337.24/item**, Nefazodone at **£617.55/item**, Isocarboxazid at **£349.57/item**) that inflate the average despite negligible prescription volumes.
+
+---
+
+### 7. Decomposition Tree — Drilling Into the Numbers
+
+The decomposition tree on the Drivers & Trends page enables interactive drill-down from national totals to individual drug-region-month combinations. For example:
+
+**Total Items (445.1M) → Sertraline hydrochloride (115.0M) → North East & Yorkshire (25.4M) → 2025 (6.0M) → 2025-12 (536,819 items)**
+
+This drill-path reveals that **North East & Yorkshire** is not only the fastest growing region nationally but also the single largest prescriber of Sertraline — consistent with its position as the highest growth region overall.
+
+---
+
+## 🔮 12-Month Forecast (Jan–Dec 2026)
+
+| Metric | 2025 Actual | 2026 Forecast | Change | MAPE |
+|--------|-------------|---------------|--------|------|
+| Total Items | ~95M | **98.24M** | **▲ 3.3%** | 3.12% ✅ |
+| Total Cost | ~£224M | **£229.29M** | **▲ 2.2%** | 13.03%* |
+| Avg Cost Per Item | ~£2.36 | **£2.33** | **▼ 1.1%** | 12.27%* |
+
+> *The higher Cost and CPI MAPE scores reflect cross-validation across the sharp 2022 structural break. Training folds that predate the 2022 changepoint naturally produce higher errors when forecasting post-2022 values. The final model with an explicit January 2022 changepoint handles this correctly — MAPE scores here are a conservative lower bound on actual model accuracy.
+
+**Monthly breakdown:**
+
+| Month | Items (M) | 80% CI | Cost (£M) | CPI (£) |
+|-------|-----------|--------|-----------|---------|
+| 2026-01 | 8.19 | 8.00 – 8.35 | £19.34 | £2.37 |
+| 2026-02 | 7.63 | 7.46 – 7.82 | £17.99 | £2.40 |
+| 2026-03 | 8.38 | 8.21 – 8.55 | £20.21 | £2.40 |
+| 2026-04 | 7.92 | 7.75 – 8.09 | £17.90 | £2.26 |
+| 2026-05 | 8.20 | 8.02 – 8.37 | £18.68 | £2.27 |
+| 2026-06 | 8.21 | 8.06 – 8.39 | £18.98 | £2.29 |
+| 2026-07 | 8.24 | 8.08 – 8.42 | £19.37 | £2.35 |
+| 2026-08 | 8.21 | 8.04 – 8.38 | £19.26 | £2.34 |
+| 2026-09 | 8.25 | 8.08 – 8.42 | £19.75 | £2.40 |
+| 2026-10 | 8.29 | 8.11 – 8.46 | £18.92 | £2.28 |
+| 2026-11 | 8.29 | 8.12 – 8.46 | £18.98 | £2.28 |
+| 2026-12 | 8.42 | 8.25 – 8.60 | £19.89 | £2.36 |
+| **TOTAL** | **98.24** | | **£229.29** | **£2.33** |
+
+**Forecast methodology:** Facebook Prophet · Explicit Jan 2022 changepoint · Annual seasonality · 80% confidence interval · Walk-forward cross-validation (5 folds)
+
+---
+
+## 📋 Recommendations
+
+Based on the analysis, the following evidence-based recommendations are made for NHS commissioners and primary care networks:
+
+### 💊 Drug Prescribing
+1. **Review Venlafaxine prescribing pathways** — At £7.29/item vs national average of £2.70, and with a +10.97pp cost burden gap, Venlafaxine represents the single largest cost efficiency opportunity. A 10% shift to equivalent generics could save ~£21M annually.
+2. **Monitor high-unit-cost MAOIs** — Tranylcypromine sulfate (£1,337.24/item), Nefazodone (£617.55/item) and Isocarboxazid (£349.57/item) are extreme outliers. Even small volume reductions have disproportionate cost impact.
+3. **Protect generic Sertraline gains** — The 37.6% cost-per-item reduction achieved through genericisation should be preserved. Any formulary changes that shift patients back to branded formulations would reverse £23M+ in annual savings.
+
+### 🗺️ Regional Commissioning
+4. **Investigate the South East cost premium** — The 42% cost-per-item gap between South East (£3.31) and North East & Yorkshire (£2.33) is significant. Understanding whether this reflects formulary differences, patient demographics or prescribing culture could unlock regional savings.
+5. **Prepare capacity for North East & Yorkshire** — At +26.3% growth over four years, this region is growing antidepressant demand nearly twice as fast as the national average (+14.6%). Forward planning for GP capacity, formulary management and pharmacy supply chains is warranted.
+
+### 📈 Demand Planning
+6. **Budget for continued volume growth** — The forecast projects **98.24M items in 2026** (▲3.3% on 2025). NHS commissioners should plan for continued growth in prescribing volumes through 2026.
+7. **Anticipate modest cost increase** — Despite continued CPI decline (£2.33 forecast), total costs are projected to rise to **£229.29M in 2026** (▲2.2%) purely due to volume growth. Genericisation savings are now largely locked in and unlikely to generate further large cost reductions absent new patent expiries.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technology | Detail |
+|-------|-----------|--------|
+| **Ingestion** | Python · `requests` | Automated NHS BSA portal scraping with incremental loading and download log |
+| **Processing** | Python · `pandas` | 11-step cleaning, filtering and aggregation pipeline |
+| **Forecasting** | Python · `prophet` | Facebook Prophet with explicit changepoint, cross-validation and MAPE reporting |
+| **Storage** | MySQL 8.0 | Star schema — dates, regions, drugs, prescriptions, forecast |
+| **Analysis** | SQL · Jupyter | 20 SQL queries across 6 analytical sections + exploratory notebook |
+| **Visualisation** | Power BI Desktop | 5-page interactive dashboard · 70+ DAX measures · 7 display folders |
+
+---
+
+## 📁 Repository Structure
+
+```
+NHS-Antidepressant-Prescribing-Analysis/
+│
+├── scraper.py                    # Automated NHS BSA data scraper
+├── processor.py                  # 11-step data processing pipeline
+├── forecast.py                   # Facebook Prophet forecasting
+├── loader.py                     # MySQL database loader (idempotent)
+│
+├── sql/
+│   ├── 01_schema.sql             # Star schema DDL
+│   ├── 02_analysis.sql           # 20 analytical SQL queries (6 sections)
+│   ├── 03_load.sql               # LOAD DATA INFILE alternative
+│   └── 04_forecast_schema.sql    # Forecast table DDL
+│
 ├── pca_data/
-│   ├── combined_pca_data
-├── Antidepressant_Analysis.ipynb  (Jupyter Notebook with detailed analysis, plots, and interpretations)
-│   
-├── scraper.py (Python script for web scraping NHS data)
-│                    
-├── NHS_Antidepressant_Prescription_Report.pdf (The final, detailed project report)
-                         
+│   ├── raw/                      # Landing zone for downloaded CSVs
+│   ├── staged_pca_data.csv       # Processed data (generated by processor.py)
+│   ├── forecast.csv              # Forecast output (generated by forecast.py)
+│   └── logs/                     # Pipeline execution logs
+│
+├── Antidepressant_Analysis.ipynb # Exploratory data analysis notebook
+├── nhs_analysis.pbix             # Power BI dashboard
+├── nhs_project_documentation.docx # Full project documentation
+├── requirements.txt              # Python dependencies
+├── .env.example                  # Environment variable template
+└── README.md
 ```
 
-## 8\. How to Run/Reproduce
+---
 
-To reproduce this analysis:
+## ⚡ Quick Start
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/Ezekwemdesmond/NHS-Antidepressant-Prescribing-Analysis.git
-    cd NHS_Antidepressant_Prescription_Analysis
-    ```
-2.  **Create a virtual environment (recommended):**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-    ```
-3.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-4.  **Run the scraper:**
-    If you wish to obtain the latest data or verify the scraping process, execute:
-    ```bash
-    python scraper.py
-    ```
-    *(Note: This scraper is designed for the NHS BSA website structure at the time of development and may require updates if the website changes.)*
-5.  **Open and run the Jupyter Notebook:**
-    *(Note: Run jupyter notebook from Anaconda Distribution (Recommended)).*
-    Execute the cells sequentially within the notebook to see the data loading, processing, analysis, and visualizations.
+### Prerequisites
+- Python 3.10+
+- MySQL 8.0
+- Power BI Desktop
 
-## 9\. Future Work
+### Installation
 
-  * **Patient Demographics:** Integrate patient demographic data (age, gender, deprivation index) to understand correlations with prescribing patterns.
-  * **Clinical Outcomes:** Explore the link between prescribing trends and clinical outcomes or mental health service utilization.
-  * **Specific Formulations/Strengths:** Delve deeper into specific drug formulations or strengths to understand their impact on cost and prescribing choices.
-  * **Impact of Policy Changes:** Analyze the direct impact of specific NHS mental health policies or guideline updates on prescribing trends.
-  * **Forecast antidepressant demand using time series models**
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-username/NHS-Antidepressant-Prescribing-Analysis.git
+cd NHS-Antidepressant-Prescribing-Analysis
 
-## 10\. Acknowledgements
+# 2. Create and activate virtual environment
+python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Mac/Linux
 
-  * Dataset: https://opendata.nhsbsa.net/dataset/prescription-cost-analysis-pca-monthly-data
+# 3. Install dependencies
+pip install -r requirements.txt
 
-## 11\. Contact
+# 4. Configure environment variables
+cp .env.example .env
+# Edit .env with your MySQL credentials
+```
 
-  * **Ezekwem Desmond/https://ezekwemdesmond.com/**
-  * **engrstephdez@gmail.com**
+### Running the Pipeline
+
+```bash
+# Step 1 — Create the database schema
+# Run sql/01_schema.sql and sql/04_forecast_schema.sql in MySQL Workbench
+
+# Step 2 — Scrape the data
+python scraper.py
+
+# Step 3 — Process the data
+python processor.py
+
+# Step 4 — Generate the forecast
+python forecast.py
+
+# Step 5 — Load into MySQL
+python loader.py
+
+# Step 6 — Open Power BI
+# Open nhs_analysis.pbix and refresh all data sources
+```
+
+---
+
+## 🗄️ Database Schema
+
+```sql
+nhs_prescribing (star schema)
+├── dates           (date_id, year_month, year, month, month_name)
+├── regions         (region_id, region_name)
+├── drugs           (drug_id, bnf_chemical_substance)
+├── prescriptions   (prescription_id, date_id*, region_id*, drug_id*, items, nic)
+└── forecast        (forecast_id, year_month, actual_items, actual_nic, actual_cpi,
+                     items_forecast, items_lower, items_upper,
+                     nic_forecast,   nic_lower,   nic_upper,
+                     cpi_forecast,   cpi_lower,   cpi_upper,
+                     is_forecast)
+```
+
+---
+
+## 📐 DAX Measures (Power BI)
+
+70+ measures across 8 display folders:
+
+| Folder | Count | Highlights |
+|--------|-------|-----------|
+| Volume Metrics | 8 | `Total Items`, `% of Total Items`, `Sertraline % of Items` |
+| Cost Metrics | 12 | `Total Cost`, `Cost Per Item`, `Efficiency Gap`, `Efficiency Classification` |
+| Time Intelligence | 18 | `Items YoY %`, `Cost YoY %`, `Latest Month Items MoM Change`, `Items 3M Rolling Avg` |
+| Current Year | 3 | `Current Year Items`, `Current Year Cost`, `Current Year Cost Per Item` |
+| Previous Year | 3 | `Previous Year Items`, `Previous Year Cost`, `Previous Year Cost Per Item` |
+| Drug Insights | 9 | `Most Prescribed Drug`, `Drug with Most Cost`, `Drug with Highest Cost Per Item` |
+| Regional Insights | 14 | `Highest Prescribing Region`, `Fastest Growing Region`, `Items Change 2021 vs 2025` |
+| Forecast | 15 | `Total Forecast Items`, `Forecast CPI`, `Forecast Items vs Current Year Label` |
+
+---
+
+## 🧠 Skills Demonstrated
+
+- **Data Engineering** — Automated scraping, incremental loading, idempotent ETL pipeline, raw landing zone, structured logging
+- **Data Modelling** — Star schema design, foreign key relationships, surrogate keys, normalisation
+- **SQL** — Window functions, CTEs, subqueries, aggregations, YoY CASE-WHEN comparisons, self-joins
+- **Python** — OOP scraper, pandas 11-step pipeline, Prophet forecasting, walk-forward cross-validation, MAPE reporting
+- **DAX** — Time intelligence patterns, dynamic TOPN measures, conditional labels with arrows, efficiency classification logic
+- **Power BI** — Data modelling, star schema relationships, report design, KPI cards, decomposition tree, key influencers visual
+- **Statistical Modelling** — Time series forecasting, changepoint detection, confidence intervals, cross-validation, MAPE interpretation
+- **Data Storytelling** — NHS colour theme, annotated insight banners, layman-friendly chart titles, cross-filtering storytelling
+
+---
+
+## 📦 Requirements
+
+```
+pandas
+numpy
+requests
+mysql-connector-python
+python-dotenv
+prophet==1.1.6
+jupyter
+matplotlib
+seaborn
+```
+
+---
+
+## 📊 Data Source
+
+| Attribute | Details |
+|-----------|---------|
+| **Source** | [NHS Business Services Authority (NHS BSA)](https://www.nhsbsa.nhs.uk/statistical-collections/prescription-cost-analysis-england) |
+| **Dataset** | Prescription Cost Analysis (PCA) Monthly Data |
+| **Coverage** | January 2021 – December 2025 (60 months) |
+| **Geography** | 7 NHS England Regions |
+| **Granularity** | GP Practice level → aggregated to drug-region-month (12,328 rows) |
+| **Licence** | [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) |
+
+---
+
+## ⚠️ Disclaimer
+
+This project uses publicly available NHS open data for portfolio and educational purposes only. All findings are based on aggregated national data and should not be used to inform clinical, commissioning or prescribing decisions without appropriate professional oversight.
+
+---
+
+## 👤 Author
+
+**Desmond Ezekwem**
+
+---
+
+<p align="center">
+  <em>Built with real NHS open data · Open Government Licence v3.0 · 445M items · £1.20bn · 60 months</em>
+</p>

@@ -1,4 +1,9 @@
 requests
-pandas
 beautifulsoup4
-lxml
+pandas
+numpy
+matplotlib
+seaborn
+mysql-connector-python
+python-dotenv
+prophet
