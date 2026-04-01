@@ -1,5 +1,5 @@
 <img src="images/NHS_Logo.jpg" alt="NHS" width="72"/>
-# 🏥 NHS Antidepressant Prescribing Analysis
+ 🏥 NHS Antidepressant Prescribing Analysis
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
