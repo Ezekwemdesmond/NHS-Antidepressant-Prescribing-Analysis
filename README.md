@@ -1,3 +1,4 @@
+<img src="images/NHS_Logo.jpg" alt="NHS" width="72"/>
 # 🏥 NHS Antidepressant Prescribing Analysis
 
 <p align="center">
@@ -304,9 +305,11 @@ Based on the analysis, the following evidence-based recommendations are made for
 ```
 NHS-Antidepressant-Prescribing-Analysis/
 │
-├── scraper.py                    # Automated NHS BSA data scraper
-├── processor.py                  # 11-step data processing pipeline
-├── forecast.py                   # Facebook Prophet forecasting
+├── scraper.py                    # Stage 1 — automated NHS BSA data scraper
+├── processor.py                  # Stage 2 — 11-step data processing pipeline
+├── forecast.py                   # Stage 3 — Facebook Prophet forecasting
+├── loader.py                     # Stage 4 — MySQL database loader
+├── pipeline.py                   # Orchestrator — runs all 4 stages in sequence
 │
 ├── sql/
 │   ├── schema.sql                # Star schema DDL
@@ -320,15 +323,15 @@ NHS-Antidepressant-Prescribing-Analysis/
 │   └── logs/                     # Pipeline execution logs
 │
 ├── images/
-│   └── matrix_heatmap.png        # Seasonal prescribing heatmap
+│          
 │
 ├── docs/
-│   └── nhs_project_documentation.pdf  # Full project documentation
+│   └── nhs_project_documentation.docx  # Full project documentation
 │
 ├── Antidepressant_Analysis.ipynb # Exploratory data analysis notebook
 ├── nhs_analysis.pbix             # Power BI dashboard
 ├── requirements.txt              # Python dependencies
-├── .env                          # Environment variable template
+├── .env                 # Environment variable template
 └── README.md
 ```
 
@@ -363,22 +366,33 @@ cp .env.example .env
 
 ### Running the Pipeline
 
-```bash
-# Step 1 — Create the database schema
-# Run sql/schema.sql and sql/forecast.sql in MySQL Workbench
+**Option A — Run everything in one command using the pipeline orchestrator:**
 
-# Step 2 — Scrape the data
+```bash
+python pipeline.py
+```
+
+`pipeline.py` runs all four stages in sequence and halts automatically if any stage fails.
+
+**Option B — Run each stage individually:**
+
+```bash
+# Step 1 — Create the database schema (run once in MySQL Workbench)
+# sql/schema.sql and sql/forecast.sql
+
+# Step 2 — Scrape and combine raw data
 python scraper.py
 
-# Step 3 — Process the data
+# Step 3 — Clean and aggregate
 python processor.py
 
-# Step 4 — Generate the forecast
+# Step 4 — Generate forecast
 python forecast.py
 
-# Step 5 — Open Power BI
-# Open nhs_analysis.pbix and refresh all data sources
+# Step 5 — Load into MySQL
+python loader.py
 ```
+
 
 ---
 
