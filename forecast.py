@@ -243,7 +243,7 @@ def main():
     logger.info(f"Periods: {FORECAST_PERIODS} months  |  CI: {int(CONFIDENCE_INTERVAL * 100)}%")
     logger.info("=" * 60)
 
-    # ── Step 1: Load staged data ──────────────────────────────────────────────
+    # Load staged data
     if not os.path.exists(INPUT_PATH):
         raise FileNotFoundError(
             f"Staged file not found: {INPUT_PATH}\n"
@@ -254,11 +254,11 @@ def main():
     df = pd.read_csv(INPUT_PATH)
     logger.info(f"Loaded {len(df):,} rows from staged CSV.")
 
-    # ── Step 2: Build monthly national totals ─────────────────────────────────
+    # Build monthly national totals
     logger.info("Aggregating to monthly national totals...")
     monthly = build_monthly_totals(df)
 
-    # ── Step 3: Validate models and report MAPE ───────────────────────────────
+    # Validate models and report MAPE
     # Validation runs before fitting the final model to surface accuracy early.
     # Items uses conservative changepoint scale — trend is smooth and steady.
     # NIC and CPI use higher scale — the 2022 genericisation was a sharp break.
@@ -267,23 +267,23 @@ def main():
     mape_nic   = validate_model(monthly, 'total_nic',   'Cost (NIC)',    changepoint_scale=0.30)
     mape_cpi   = validate_model(monthly, 'total_cpi',   'Cost Per Item', changepoint_scale=0.30)
 
-    # ── Step 4: Fit final models and generate forecasts ───────────────────────
+    #Fit final models and generate forecasts
     logger.info("Fitting final models and generating forecasts...")
     fc_items = fit_and_forecast(monthly, 'total_items', 'Items',         changepoint_scale=0.05)
     fc_nic   = fit_and_forecast(monthly, 'total_nic',   'Cost (NIC)',    changepoint_scale=0.30)
     fc_cpi   = fit_and_forecast(monthly, 'total_cpi',   'Cost Per Item', changepoint_scale=0.30)
 
-    # ── Step 5: Build combined forecast table ─────────────────────────────────
+    # Build combined forecast table 
     logger.info("Building combined forecast table...")
     forecast_df = build_forecast_table(monthly, fc_items, fc_nic, fc_cpi)
     logger.info(f"Forecast table: {len(forecast_df)} rows ({(~forecast_df['is_forecast']).sum()} historical + {forecast_df['is_forecast'].sum()} forecast)")
 
-    # ── Step 6: Save forecast CSV ─────────────────────────────────────────────
+    # Save forecast CSV
     forecast_df.to_csv(OUTPUT_PATH, index=False)
     logger.info(f"Forecast saved: {len(forecast_df):,} rows → {OUTPUT_PATH}")
     logger.info("Next step: run loader.py to load into MySQL.")
 
-    # ── Step 7: Print summary ─────────────────────────────────────────────────
+    # Step 7: Print summary 
     print_forecast_summary(forecast_df, mape_items, mape_nic, mape_cpi)
 
     logger.info("=" * 60)
